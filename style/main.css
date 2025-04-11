@@ -1,0 +1,32 @@
+body {
+    background-color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  #game {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    background-color: #222;
+    border: 2px solid white;
+    overflow: hidden;
+  }
+  
+  .entity {
+    position: absolute;
+    width: 40px;
+    height: 60px;
+  }
+  
+  #player {
+    background-color: deepskyblue;
+  }
+  
+  #bot {
+    background-color: tomato;
+  }
+  

@@ -1,0 +1,24 @@
+# VS Code settings (optional to share)
+.vscode/
+
+# Logs
+*.log
+
+# OS/System Files
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+
+# Build folders (if you add them later)
+dist/
+build/
+
+# Temporary / Backup Files
+*.tmp
+*.bak
+*.swp
+*~
+
+
