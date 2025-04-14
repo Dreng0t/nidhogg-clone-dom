@@ -21,6 +21,13 @@ function checkPlayerAttack() {
       playerBox.top <= botBox.bottom
     ) {
       console.log('Bot hit!');
+      bot.health -= 1;
+
+      document.getElementById('bot-health').innerText = 'Bot Health: ' + bot.health;
+    }
+    if (bot.health <= 0) {
+      console.log('Bot defeated!');
+      // Later: Handle death/respawn
     }
   }
 }
@@ -37,6 +44,13 @@ function checkBotAttack() {
       botBox.top <= playerBox.bottom
     ) {
       console.log('Player hit!');
+      player.health -= 1;
+  
+      document.getElementById('player-health').innerText = 'Player Health: ' + player.health;
+    }
+    if (player.health <= 0) {
+      console.log('Player defeated!');
+      // Later: Handle death/respawn
     }
   }
 }
