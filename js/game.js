@@ -1,6 +1,9 @@
 const player = new Player(100, 300);
 const bot = new Bot(600, 300);
 
+const knockbackForce = 5;
+
+
 function update() {
   player.update();
   bot.update(player);
@@ -22,6 +25,12 @@ function checkPlayerAttack() {
     ) {
       console.log('Bot hit!');
       bot.health -= 1;
+
+      if (player.facingRight) {
+        bot.vx = knockbackForce;
+      } else {
+        bot.vx = -knockbackForce;
+      }
 
       document.getElementById('bot-health').innerText = 'Bot Health: ' + bot.health;
     }
@@ -45,7 +54,16 @@ function checkBotAttack() {
     ) {
       console.log('Player hit!');
       player.health -= 1;
-  
+
+      // Apply knockback to player
+      if (bot.facingRight) {
+        player.vx = knockbackForce;
+      } else {
+        player.vx = -knockbackForce;
+      }
+
+      player.isKnockedBack = true;
+
       document.getElementById('player-health').innerText = 'Player Health: ' + player.health;
     }
     if (player.health <= 0) {

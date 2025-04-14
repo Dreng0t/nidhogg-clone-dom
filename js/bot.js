@@ -11,16 +11,18 @@ class Bot {
       this.attackCooldown = false;
       this.facingRight = true;
       this.hasAttacked = false;
+      this.health = 3;
+
+      this.vx = 0; // For knockback movement
+      this.vy = 0; // Not used yet, but ready for future jumping/gravity
 
       this.element = document.getElementById('bot');
-
-      this.health = 3;
   }
 
   update(player) {
       const distance = player.x - this.x;
 
-      // Move toward player if not in attack range
+      // Movement logic - only chase if not in attack range
       if (Math.abs(distance) > this.attackRange) {
           if (distance > 0) {
               this.x += this.speed;
@@ -30,15 +32,20 @@ class Bot {
               this.facingRight = false;
           }
 
-          this.hasAttacked = false; // Reset attack state when moving
+          this.hasAttacked = false; // Reset attack if moving
       }
 
-      // Handle Attacking
-      if (Math.abs(distance) <= this.attackRange && !this.attacking && !this.attackCooldown && !this.hasAttacked) {
+      // Attack logic
+      if (
+          Math.abs(distance) <= this.attackRange &&
+          !this.attacking &&
+          !this.attackCooldown &&
+          !this.hasAttacked
+      ) {
           this.attacking = true;
           this.hasAttacked = true;
 
-          // Show attack hitbox (orange)
+          // Create attack hitbox (orange)
           const hitboxX = this.facingRight
               ? this.x + this.width
               : this.x - 10;
@@ -63,11 +70,18 @@ class Bot {
 
               setTimeout(() => {
                   this.attackCooldown = false;
-              }, 500); // Cooldown between attacks
-          }, 100); // Attack duration
+              }, 500);
+          }, 100);
       }
 
-      // Update Bot Element Position in DOM
+      // Apply knockback velocity to position
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Apply friction to knockback (slows down vx over time)
+      this.vx *= 0.9;
+
+      // Update Bot's position on screen
       this.element.style.left = this.x + 'px';
       this.element.style.top = this.y + 'px';
   }
