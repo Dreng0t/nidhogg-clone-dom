@@ -101,4 +101,16 @@ class Player {
         this.element.style.left = this.x + 'px';
         this.element.style.top = this.y + 'px';
     }
+
+    respawn(startX, startY) {
+        this.x = startX;
+        this.y = startY;
+        this.health = 3; // Reset health
+        this.vx = 0;
+        this.vy = 0;
+        this.isKnockedBack = false;
+
+        this.element.style.left = this.x + 'px';
+        this.element.style.top = this.y + 'px';
+    }
 }

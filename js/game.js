@@ -36,7 +36,23 @@ function checkPlayerAttack() {
     }
     if (bot.health <= 0) {
       console.log('Bot defeated!');
-      // Later: Handle death/respawn
+
+      // Optional: Hide bot temporarily
+      bot.element.style.display = 'none';
+
+      setTimeout(() => {
+        bot.element.style.display = 'block';
+        bot.respawn(600, 300); // Respawn at starting position
+        document.getElementById('bot-health').innerText = 'Bot Health: ' + bot.health;
+      }, 2000); // 2 second respawn delay
+
+      document.getElementById('message').innerText = 'Bot Defeated!';
+      document.getElementById('message').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('message').style.display = 'none';
+      }, 2000);
+
     }
   }
 }
@@ -68,7 +84,20 @@ function checkBotAttack() {
     }
     if (player.health <= 0) {
       console.log('Player defeated!');
-      // Later: Handle death/respawn
+      player.element.style.display = 'none';
+
+      setTimeout(() => {
+        player.element.style.display = 'block';
+        player.respawn(100, 300); // Respawn player
+        document.getElementById('player-health').innerText = 'Player Health: ' + player.health;
+      }, 2000);
+
+      document.getElementById('message').innerText = 'Player Defeated!';
+      document.getElementById('message').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('message').style.display = 'none';
+      }, 2000);
     }
   }
 }
