@@ -5,12 +5,12 @@ class Player {
         this.width = 40;
         this.height = 60;
 
-        this.vx = 0; // Horizontal velocity
-        this.vy = 0; // Vertical velocity
+        this.vx = 0;
+        this.vy = 0;
 
         this.speed = 3;
-        this.jumpStrength = -10;
-        this.gravity = 0.5;
+        this.jumpStrength = -12;
+        this.gravity = 0.6;
         this.onGround = false;
 
         this.attacking = false;
@@ -18,13 +18,17 @@ class Player {
         this.facingRight = true;
         this.health = 3;
 
-        this.isKnockedBack = false; // Controls knockback state
+        this.isKnockedBack = false;
 
         this.element = document.getElementById('player');
     }
 
     update() {
-        // Handle Movement Input only if not knocked back
+        const game = document.getElementById('game');
+        const gameTop = game.offsetTop;
+        const gameLeft = game.offsetLeft;
+
+        // Handle Movement Input
         if (!this.isKnockedBack) {
             if (keys['a']) {
                 this.vx = -this.speed;
@@ -82,30 +86,54 @@ class Player {
         this.x += this.vx;
         this.y += this.vy;
 
-        // Apply Friction to Knockback (slow down vx over time)
+        // Apply Friction to Knockback
         this.vx *= 0.9;
-
-        // Turn off knockback once vx is small enough
         if (this.isKnockedBack && Math.abs(this.vx) < 0.5) {
             this.isKnockedBack = false;
         }
 
-        // Ground Collision
-        if (this.y + this.height >= 400) {
+        // Reset onGround before collision checks
+        this.onGround = false;
+
+        // Check Platform Collisions
+        const platforms = Array.from(document.querySelectorAll('.platform'));
+
+        platforms.forEach(platform => {
+            const platformTop = platform.offsetTop;
+            const platformLeft = platform.offsetLeft;
+            const platformRight = platformLeft + platform.offsetWidth;
+
+            const standingOnPlatform =
+                this.y + this.height >= platformTop - gameTop &&
+                this.y + this.height <= platformTop - gameTop + Math.max(this.vy, 0) + 5 &&
+                this.x + this.width >= platformLeft - gameLeft &&
+                this.x <= platformRight - gameLeft &&
+                this.vy >= 0;
+
+            if (standingOnPlatform) {
+                this.y = platformTop - gameTop - this.height;
+                this.vy = 0;
+                this.onGround = true;
+            }
+        });
+
+        // Check Ground Collision Last
+        if (this.y + this.height >= 400 && !this.onGround) {
             this.y = 400 - this.height;
             this.vy = 0;
             this.onGround = true;
         }
 
-        // Update Player Element Position in the DOM
+        // Update Position in the DOM
         this.element.style.left = this.x + 'px';
         this.element.style.top = this.y + 'px';
     }
 
+    // Respawn Player Method
     respawn(startX, startY) {
         this.x = startX;
         this.y = startY;
-        this.health = 3; // Reset health
+        this.health = 3;
         this.vx = 0;
         this.vy = 0;
         this.isKnockedBack = false;

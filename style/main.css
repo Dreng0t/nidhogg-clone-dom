@@ -49,4 +49,9 @@ body {
     display: none;
 }
 
+.platform {
+  position: absolute;
+  height: 10px;
+  background-color: grey;
+}
   
