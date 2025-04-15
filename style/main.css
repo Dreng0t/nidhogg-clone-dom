@@ -1,20 +1,24 @@
+/* Reset default margins */
 body {
-    background-color: #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  
-  #game {
-    position: relative;
-    width: 800px;
-    height: 400px;
-    background-color: #222;
-    border: 2px solid white;
-    overflow: hidden;
-  }
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Game container */
+#game {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background-color: #222;
+  border: 2px solid white; /* Optional for visibility */
+  overflow: hidden;
+}
+
   
   .entity {
     position: absolute;

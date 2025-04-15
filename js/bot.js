@@ -25,13 +25,8 @@ class Bot {
   update(player) {
     const distance = player.x - this.x;
     const verticalDistance = player.y - this.y;
-    const horizontalDistance = Math.abs(player.x - this.x);
+    const horizontalDistance = Math.abs(distance);
 
-    const game = document.getElementById('game');
-    const gameTop = game.offsetTop;
-    const gameLeft = game.offsetLeft;
-
-    // Basic movement toward player
     if (Math.abs(distance) > this.attackRange) {
       if (distance > 0) {
         this.x += this.speed;
@@ -44,7 +39,6 @@ class Bot {
       this.hasAttacked = false;
     }
 
-    // Jump toward player if they're above and close enough horizontally
     if (
       verticalDistance < -30 &&
       verticalDistance > -100 &&
@@ -57,7 +51,6 @@ class Bot {
 
     this.handleAttack(player);
 
-    // Apply gravity and knockback
     this.vy += this.gravity;
     this.x += this.vx;
     this.y += this.vy;
@@ -66,7 +59,6 @@ class Bot {
 
     this.handleCollisions();
 
-    // Update DOM element position
     this.element.style.left = this.x + 'px';
     this.element.style.top = this.y + 'px';
   }
@@ -115,34 +107,31 @@ class Bot {
   handleCollisions() {
     this.onGround = false;
 
-    const game = document.getElementById('game');
-    const gameTop = game.offsetTop;
-    const gameLeft = game.offsetLeft;
-
     const platforms = Array.from(document.querySelectorAll('.platform'));
-
     platforms.forEach(platform => {
-      const platformTop = platform.offsetTop - gameTop;
-      const platformLeft = platform.offsetLeft - gameLeft;
-      const platformRight = platformLeft + platform.offsetWidth;
+      const platTop = parseInt(platform.style.top);
+      const platLeft = parseInt(platform.style.left);
+      const platRight = platLeft + platform.offsetWidth;
 
       const standingOnPlatform =
-        this.y + this.height >= platformTop &&
-        this.y + this.height <= platformTop + Math.max(this.vy, 0) + 5 &&
-        this.x + this.width >= platformLeft &&
-        this.x <= platformRight &&
+        this.y + this.height >= platTop &&
+        this.y + this.height <= platTop + Math.max(this.vy, 0) + 5 &&
+        this.x + this.width >= platLeft &&
+        this.x <= platRight &&
         this.vy >= 0;
 
       if (standingOnPlatform) {
-        this.y = platformTop - this.height;
+        this.y = platTop - this.height;
         this.vy = 0;
         this.onGround = true;
       }
     });
 
-    // Fallback to ground
-    if (this.y + this.height >= 400 && !this.onGround) {
-      this.y = 400 - this.height;
+    const groundLevel = document.getElementById('game').offsetHeight;
+
+
+    if (this.y + this.height >= groundLevel && !this.onGround) {
+      this.y = groundLevel - this.height;
       this.vy = 0;
       this.onGround = true;
     }
