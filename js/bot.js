@@ -20,6 +20,8 @@ class Bot {
     this.vy = 0;
 
     this.element = document.getElementById('bot');
+
+    this.isDead = false;
   }
 
   update(player) {

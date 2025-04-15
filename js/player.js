@@ -20,6 +20,9 @@ class Player {
         this.isKnockedBack = false;
 
         this.element = document.getElementById('player');
+
+        this.isDead = false;
+
     }
 
     update() {
