@@ -1,3 +1,9 @@
+document.getElementById('start-button').addEventListener('click', () => {
+  document.getElementById('start-screen').style.display = 'none';
+  gameLoop(); // Start the game loop after hiding the screen
+});
+
+
 let gameOver = false;
 let playerDeaths = 0;
 let botDeaths = 0;
@@ -148,4 +154,12 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-gameLoop();
+document.getElementById('start-button').addEventListener('click', () => {
+  const screen = document.getElementById('start-screen');
+  screen.classList.add('hidden');
+  setTimeout(() => {
+    screen.style.display = 'none';
+    gameLoop(); // ✅ start game after fade-out
+  }, 500);
+});
+
