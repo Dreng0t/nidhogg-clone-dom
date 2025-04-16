@@ -2,8 +2,11 @@ class Bot {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.width = 40;
-    this.height = 60;
+    this.width = 60;
+    this.height = 90;
+    this.attackRange = this.width + 10;
+    this.hitboxOffsetY = this.height / 3;
+
 
     this.speed = 2;
     this.attackRange = 50;
@@ -22,7 +25,33 @@ class Bot {
     this.element = document.getElementById('bot');
 
     this.isDead = false;
+
+    this.element = document.getElementById('bot');
+    this.element.classList.add('bot-color');
+
+    this.element.style.width = this.width + "px";
+    this.element.style.height = this.height + "px";
+
+
   }
+
+  setSprite(state) {
+    switch (state) {
+      case 'idle':
+        this.element.style.backgroundImage = "url('assets/Idle.png')";
+        break;
+      case 'run':
+        this.element.style.backgroundImage = "url('assets/Run.png')";
+        break;
+      case 'attack':
+        this.element.style.backgroundImage = "url('assets/Punch.png')";
+        break;
+      case 'jump':
+        this.element.style.backgroundImage = "url('assets/Jump.png')";
+        break;
+    }
+  }
+
 
   update(player) {
     const distance = player.x - this.x;
@@ -38,8 +67,15 @@ class Bot {
         this.facingRight = false;
       }
 
+      this.element.style.transform = this.facingRight ? 'scaleX(1)' : 'scaleX(-1)';
+
+
+      this.setSprite('run');
       this.hasAttacked = false;
+    } else {
+      this.setSprite('idle'); // too close to move
     }
+
 
     if (
       verticalDistance < -30 &&
@@ -77,11 +113,13 @@ class Bot {
       this.attacking = true;
       this.hasAttacked = true;
 
+      this.setSprite('attack');
+
       const hitboxX = this.facingRight
         ? this.x + this.width
         : this.x - 10;
 
-      const hitboxY = this.y + this.height / 3;
+        const hitboxY = this.y + this.hitboxOffsetY;
 
       const attackBox = document.createElement('div');
       attackBox.style.position = 'absolute';
@@ -98,6 +136,7 @@ class Bot {
         attackBox.remove();
         this.attacking = false;
         this.attackCooldown = true;
+        this.setSprite('idle');
 
         setTimeout(() => {
           this.attackCooldown = false;

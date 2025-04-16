@@ -15,42 +15,58 @@ body {
   width: 800px;
   height: 600px;
   background-color: #222;
-  border: 2px solid white; /* Optional for visibility */
+  border: 2px solid white;
   overflow: hidden;
 }
 
-  
-  .entity {
-    position: absolute;
-    width: 40px;
-    height: 60px;
-  }
-  
-  #player {
-    background-color: deepskyblue;
-  }
-  
-  #bot {
-    background-color: tomato;
-  }
 
-  #ui {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-family: sans-serif;
-  }
+.entity {
+  position: absolute;
+  width: 40px;
+  height: 60px;
+}
 
-  #message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 32px;
-    font-family: sans-serif;
-    display: none;
+#player {
+  width: 40px;
+  height: 60px;
+  background-image: url('../assets/Idle.png');
+  background-size: cover;
+  position: absolute;
+}
+
+.player-color {
+  filter: hue-rotate(200deg) drop-shadow(0 0 2px lightblue);
+}
+
+#bot {
+  width: 40px;
+  height: 60px;
+  background-image: url('../assets/Idle.png');
+  background-size: cover;
+  position: absolute;
+}
+
+.bot-color {
+  filter: hue-rotate(0deg) drop-shadow(0 0 2px tomato);
+}
+
+#ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-family: sans-serif;
+}
+
+#message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 32px;
+  font-family: sans-serif;
+  display: none;
 }
 
 .platform {

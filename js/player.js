@@ -2,8 +2,14 @@ class Player {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 40;
-        this.height = 60;
+        this.width = 60;
+        this.height = 90;
+        
+        this.attackRange = this.width + 10; // optional, tweakable
+        
+        // Optional: makes attack hitbox placement easier to adjust later
+        this.hitboxOffsetY = this.height / 3;
+        
 
         this.vx = 0;
         this.vy = 0;
@@ -23,34 +29,67 @@ class Player {
 
         this.isDead = false;
 
+        this.element = document.getElementById('player');
+        this.element.classList.add('player-color');
+
+        this.element.style.width = this.width + "px";
+        this.element.style.height = this.height + "px";
+
+
     }
+
+    setSprite(state) {
+        switch (state) {
+            case 'idle':
+                this.element.style.backgroundImage = "url('assets/Idle.png')";
+                break;
+            case 'run':
+                this.element.style.backgroundImage = "url('assets/Run.png')";
+                break;
+            case 'attack':
+                this.element.style.backgroundImage = "url('assets/Punch.png')";
+                break;
+            case 'jump':
+                this.element.style.backgroundImage = "url('assets/Jump.png')";
+                break;
+        }
+    }
+
 
     update() {
         if (!this.isKnockedBack) {
             if (keys['a']) {
                 this.vx = -this.speed;
                 this.facingRight = false;
+                if (!this.attacking) this.setSprite('run');
             } else if (keys['d']) {
                 this.vx = this.speed;
                 this.facingRight = true;
+                if (!this.attacking) this.setSprite('run');
             } else {
                 this.vx = 0;
+                if (!this.attacking) this.setSprite('idle');
             }
+
+            this.element.style.transform = this.facingRight ? 'scaleX(1)' : 'scaleX(-1)';
+
         }
 
         if (keys['w'] && this.onGround) {
             this.vy = this.jumpStrength;
             this.onGround = false;
+            if (!this.attacking) this.setSprite('jump');
         }
 
         if (keys['j'] && !this.attacking && !this.attackCooldown) {
             this.attacking = true;
+            this.setSprite('attack');
 
             const hitboxX = this.facingRight
                 ? this.x + this.width
                 : this.x - 10;
 
-            const hitboxY = this.y + this.height / 3;
+            const hitboxY = this.y + this.hitboxOffsetY;
 
             const attackBox = document.createElement('div');
             attackBox.style.position = 'absolute';
