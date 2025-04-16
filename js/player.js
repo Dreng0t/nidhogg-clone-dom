@@ -49,9 +49,9 @@ class Player {
             case 'run':
                 this.element.style.backgroundImage = "url('assets/Run.png')";
                 break;
-            case 'attack':
+            /*case 'attack':
                 this.element.style.backgroundImage = "url('assets/Punch.png')";
-                break;
+                break;*/
             case 'jump':
                 this.element.style.backgroundImage = "url('assets/Jump.png')";
                 break;
@@ -76,15 +76,18 @@ class Player {
 
             this.element.style.transform = this.facingRight ? 'scaleX(1)' : 'scaleX(-1)';
 
-            if (this.facingRight) {
-                this.sword.style.left = '30px';
-              } else {
-                this.sword.style.left = '30px'; // or however wide your sword is
+            if (!this.attacking) {
+                if (this.facingRight) {
+                  this.sword.style.left = '30px';
+                } else {
+                  this.sword.style.left = '30px'; // tweak this if needed
+                }
+              
+                this.sword.style.transform = this.facingRight
+                  ? 'scaleX(1) rotate(30deg)'
+                  : 'scaleX(-1) rotate(-30deg)';
               }
-
-              this.sword.style.transform = this.facingRight
-              ? 'scaleX(1) rotate(30deg)'
-              : 'scaleX(-1) rotate(-30deg)';
+              
               
               
 
@@ -103,7 +106,7 @@ class Player {
             
             this.sword.style.transform = this.facingRight
               ? 'scaleX(1) rotate(90deg)'
-              : 'scaleX(-1) rotate(270deg)';
+              : 'scaleX(-1) rotate(-90deg)';
           
             setTimeout(() => {
               
@@ -117,7 +120,7 @@ class Player {
               setTimeout(() => {
                 this.attackCooldown = false;
               }, 300);
-            }, 100);
+            }, 150);
           }
           
           

@@ -125,37 +125,26 @@ class Bot {
     ) {
       this.attacking = true;
       this.hasAttacked = true;
-
-      this.setSprite('attack');
-
-      const hitboxX = this.facingRight
-        ? this.x + this.width
-        : this.x - 10;
-
-        const hitboxY = this.y + this.hitboxOffsetY;
-
-      const attackBox = document.createElement('div');
-      attackBox.style.position = 'absolute';
-      attackBox.style.left = hitboxX + 'px';
-      attackBox.style.top = hitboxY + 'px';
-      attackBox.style.width = '10px';
-      attackBox.style.height = '10px';
-      attackBox.style.backgroundColor = 'orange';
-      attackBox.style.zIndex = '10';
-
-      document.getElementById('game').appendChild(attackBox);
-
+    
+      // 🔻 This is where we animate the sword:
+      this.sword.style.transform = this.facingRight
+        ? 'scaleX(1) rotate(90deg)'
+        : 'scaleX(-1) rotate(-90deg)';
+    
       setTimeout(() => {
-        attackBox.remove();
+        this.sword.style.transform = this.facingRight
+          ? 'scaleX(1) rotate(30deg)'
+          : 'scaleX(-1) rotate(-30deg)';
+    
         this.attacking = false;
         this.attackCooldown = true;
-        this.setSprite('idle');
-
+    
         setTimeout(() => {
           this.attackCooldown = false;
-        }, 500);
-      }, 100);
+        }, 150); // ← cooldown
+      }, 300); // ← sword stab duration
     }
+    
   }
 
   handleCollisions() {

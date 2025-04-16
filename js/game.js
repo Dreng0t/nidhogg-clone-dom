@@ -25,14 +25,14 @@ function update() {
 
 function checkPlayerAttack() {
   if (player.attacking && !bot.isDead) {
-    const playerBox = player.element.getBoundingClientRect();
+    const swordBox = player.sword.getBoundingClientRect();
     const botBox = bot.element.getBoundingClientRect();
 
     if (
-      playerBox.right >= botBox.left &&
-      playerBox.left <= botBox.right &&
-      playerBox.bottom >= botBox.top &&
-      playerBox.top <= botBox.bottom
+      swordBox.right >= botBox.left &&
+      swordBox.left <= botBox.right &&
+      swordBox.bottom >= botBox.top &&
+      swordBox.top <= botBox.bottom
     ) {
       console.log('Bot hit!');
       bot.health -= 1;
@@ -80,14 +80,14 @@ function checkPlayerAttack() {
 
 function checkBotAttack() {
   if (bot.attacking && !player.isDead) {
+    const swordBox = bot.sword.getBoundingClientRect();
     const playerBox = player.element.getBoundingClientRect();
-    const botBox = bot.element.getBoundingClientRect();
 
     if (
-      botBox.right >= playerBox.left &&
-      botBox.left <= playerBox.right &&
-      botBox.bottom >= playerBox.top &&
-      botBox.top <= playerBox.bottom
+      swordBox.right >= playerBox.left &&
+      swordBox.left <= playerBox.right &&
+      swordBox.bottom >= playerBox.top &&
+      swordBox.top <= playerBox.bottom
     ) {
       console.log('Player hit!');
       player.health -= 1;
