@@ -4,12 +4,12 @@ class Player {
         this.y = y;
         this.width = 60;
         this.height = 90;
-        
+
         this.attackRange = this.width + 10; // optional, tweakable
-        
+
         // Optional: makes attack hitbox placement easier to adjust later
         this.hitboxOffsetY = this.height / 3;
-        
+
 
         this.vx = 0;
         this.vy = 0;
@@ -35,6 +35,9 @@ class Player {
         this.element.style.width = this.width + "px";
         this.element.style.height = this.height + "px";
 
+        this.sword = document.createElement('div');
+        this.sword.classList.add('sword');
+        this.element.appendChild(this.sword);
 
     }
 
@@ -73,6 +76,18 @@ class Player {
 
             this.element.style.transform = this.facingRight ? 'scaleX(1)' : 'scaleX(-1)';
 
+            if (this.facingRight) {
+                this.sword.style.left = '30px';
+              } else {
+                this.sword.style.left = '30px'; // or however wide your sword is
+              }
+
+              this.sword.style.transform = this.facingRight
+              ? 'scaleX(1) rotate(30deg)'
+              : 'scaleX(-1) rotate(-30deg)';
+              
+              
+
         }
 
         if (keys['w'] && this.onGround) {
@@ -84,34 +99,28 @@ class Player {
         if (keys['j'] && !this.attacking && !this.attackCooldown) {
             this.attacking = true;
             this.setSprite('attack');
-
-            const hitboxX = this.facingRight
-                ? this.x + this.width
-                : this.x - 10;
-
-            const hitboxY = this.y + this.hitboxOffsetY;
-
-            const attackBox = document.createElement('div');
-            attackBox.style.position = 'absolute';
-            attackBox.style.left = hitboxX + 'px';
-            attackBox.style.top = hitboxY + 'px';
-            attackBox.style.width = '10px';
-            attackBox.style.height = '10px';
-            attackBox.style.backgroundColor = 'yellow';
-            attackBox.style.zIndex = '10';
-
-            document.getElementById('game').appendChild(attackBox);
-
+          
+            
+            this.sword.style.transform = this.facingRight
+              ? 'scaleX(1) rotate(90deg)'
+              : 'scaleX(-1) rotate(270deg)';
+          
             setTimeout(() => {
-                attackBox.remove();
-                this.attacking = false;
-                this.attackCooldown = true;
-
-                setTimeout(() => {
-                    this.attackCooldown = false;
-                }, 300);
+              
+              this.sword.style.transform = this.facingRight
+                ? 'scaleX(1) rotate(30deg)'
+                : 'scaleX(-1) rotate(-30deg)';
+          
+              this.attacking = false;
+              this.attackCooldown = true;
+          
+              setTimeout(() => {
+                this.attackCooldown = false;
+              }, 300);
             }, 100);
-        }
+          }
+          
+          
 
         this.vy += this.gravity;
         this.x += this.vx;
@@ -129,12 +138,13 @@ class Player {
             const platTop = parseInt(platform.style.top);
             const platLeft = parseInt(platform.style.left);
             const platRight = platLeft + platform.offsetWidth;
+            const padding = 25;
 
             const standingOnPlatform =
                 this.y + this.height >= platTop &&
                 this.y + this.height <= platTop + Math.max(this.vy, 0) + 5 &&
-                this.x + this.width >= platLeft &&
-                this.x <= platRight &&
+                (this.x + this.width - padding) >= platLeft &&
+                (this.x + padding) <= platRight &&
                 this.vy >= 0;
 
             if (standingOnPlatform) {

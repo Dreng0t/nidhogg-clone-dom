@@ -32,6 +32,10 @@ class Bot {
     this.element.style.width = this.width + "px";
     this.element.style.height = this.height + "px";
 
+    this.sword = document.createElement('div');
+    this.sword.classList.add('sword');
+    this.element.appendChild(this.sword);
+
 
   }
 
@@ -69,6 +73,15 @@ class Bot {
 
       this.element.style.transform = this.facingRight ? 'scaleX(1)' : 'scaleX(-1)';
 
+      if (this.facingRight) {
+        this.sword.style.left = '30px';
+      } else {
+        this.sword.style.left = '30px'; // or however wide your sword is
+      }
+
+      this.sword.style.transform = this.facingRight
+      ? 'scaleX(1) rotate(30deg)'
+      : 'scaleX(-1) rotate(-30deg)';
 
       this.setSprite('run');
       this.hasAttacked = false;
@@ -78,8 +91,8 @@ class Bot {
 
 
     if (
-      verticalDistance < -30 &&
-      verticalDistance > -100 &&
+      verticalDistance < -60 &&
+      verticalDistance > -150 &&
       horizontalDistance < 150 &&
       this.onGround
     ) {
@@ -153,12 +166,13 @@ class Bot {
       const platTop = parseInt(platform.style.top);
       const platLeft = parseInt(platform.style.left);
       const platRight = platLeft + platform.offsetWidth;
+      const padding = 25;
 
       const standingOnPlatform =
         this.y + this.height >= platTop &&
         this.y + this.height <= platTop + Math.max(this.vy, 0) + 5 &&
-        this.x + this.width >= platLeft &&
-        this.x <= platRight &&
+        (this.x + this.width - padding) >= platLeft &&
+        (this.x + padding) <= platRight &&
         this.vy >= 0;
 
       if (standingOnPlatform) {

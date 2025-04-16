@@ -50,6 +50,19 @@ body {
   filter: hue-rotate(0deg) drop-shadow(0 0 2px tomato);
 }
 
+.sword {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-image: url('../assets/sword.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  top: 5px; /* vertical offset relative to player */
+  
+  transform-origin: center center;
+}
+
+
 #ui {
   position: absolute;
   top: 10px;
