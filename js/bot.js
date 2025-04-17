@@ -8,13 +8,13 @@ class Bot {
     this.hitboxOffsetY = this.height / 3;
 
 
-    this.speed = 2;
+    this.speed = 1.5;
     this.attackRange = 50;
     this.attacking = false;
     this.attackCooldown = false;
     this.facingRight = true;
     this.hasAttacked = false;
-    this.health = 3;
+    this.health = 100;
 
     this.gravity = 0.6;
     this.jumpStrength = -12;
@@ -35,7 +35,7 @@ class Bot {
     this.sword = document.createElement('div');
     this.sword.classList.add('sword');
     this.element.appendChild(this.sword);
-
+    //constructor very similar to player.js, all the same attributes
 
   }
 
@@ -53,21 +53,21 @@ class Bot {
       case 'jump':
         this.element.style.backgroundImage = "url('assets/Jump.png')";
         break;
-    }
+    }//switch statement for the state of the bot and the corresponding sprite asset
   }
 
 
-  update(player) {
+  update(player) {//update function for the bot, takes in the player as argument as so much of what the bot does is determined by what the player does
     const distance = player.x - this.x;
     const verticalDistance = player.y - this.y;
-    const horizontalDistance = Math.abs(distance);
+    const horizontalDistance = Math.abs(distance);//determines the distance between the bot and player, to be used in managing the behaviour of the bot
 
-    if (Math.abs(distance) > this.attackRange) {
-      if (distance > 0) {
-        this.x += this.speed;
+    if (horizontalDistance > this.attackRange) {
+      if (distance > 0) {//block detemining whether the bot should move
+        this.x += this.speed;//if the player is outside of the bots attack range then move toward it
         this.facingRight = true;
       } else {
-        this.x -= this.speed;
+        this.x -= this.speed;//negative velocity if the player is to the left (ditance<0) of the bot
         this.facingRight = false;
       }
 
@@ -76,78 +76,87 @@ class Bot {
       if (this.facingRight) {
         this.sword.style.left = '30px';
       } else {
-        this.sword.style.left = '30px'; // or however wide your sword is
+        this.sword.style.left = '30px'; 
       }
 
       this.sword.style.transform = this.facingRight
-      ? 'scaleX(1) rotate(30deg)'
-      : 'scaleX(-1) rotate(-30deg)';
+        ? 'scaleX(1) rotate(30deg)'
+        : 'scaleX(-1) rotate(-30deg)';//code that handles flipping the bot in the direction it is moving in, similar to the player
 
       this.setSprite('run');
       this.hasAttacked = false;
     } else {
-      this.setSprite('idle'); // too close to move
+      this.setSprite('idle'); //handles what mode the sprite should be set to
     }
 
 
     if (
       verticalDistance < -60 &&
-      verticalDistance > -150 &&
+      verticalDistance > -250 &&
       horizontalDistance < 150 &&
-      this.onGround
+      this.onGround//sets out the conditions under which the bot should jump to reach the player
     ) {
       this.vy = this.jumpStrength;
-      this.onGround = false;
+      this.onGround = false;//if the above conditions are met, jump
     }
 
     this.handleAttack(player);
 
     this.vy += this.gravity;
     this.x += this.vx;
-    this.y += this.vy;
+    this.y += this.vy;//movement for the bot
 
-    this.vx *= 0.9;
+    this.vx *= 0.9;//knockback friction
 
     this.handleCollisions();
 
+    // keeps the bot within the bounds of the playable area
+    const game = document.getElementById('game');
+    const maxX = game.offsetWidth - this.width;
+
+    if (this.x < 0) this.x = 0;
+    if (this.x > maxX) this.x = maxX;
+
+
     this.element.style.left = this.x + 'px';
-    this.element.style.top = this.y + 'px';
+    this.element.style.top = this.y + 'px';//applies bot postion to the bot DOM
   }
 
-  handleAttack(player) {
+  handleAttack(player) {//function colled upon to handle how and when the bot should attack the player
     const distance = player.x - this.x;
 
     if (
       Math.abs(distance) <= this.attackRange &&
       !this.attacking &&
       !this.attackCooldown &&
-      !this.hasAttacked
+      !this.hasAttacked//lays out the condition under which the bot should make an attack, if the player is in range
     ) {
       this.attacking = true;
       this.hasAttacked = true;
-    
-      // 🔻 This is where we animate the sword:
+      this.setSprite('attack');//sets the attack booleans to attack aswell as the sprite mode
+
+      
       this.sword.style.transform = this.facingRight
         ? 'scaleX(1) rotate(90deg)'
-        : 'scaleX(-1) rotate(-90deg)';
-    
+        : 'scaleX(-1) rotate(-90deg)';//sets the sword flat upon an attack, same as the player
+
       setTimeout(() => {
         this.sword.style.transform = this.facingRight
           ? 'scaleX(1) rotate(30deg)'
           : 'scaleX(-1) rotate(-30deg)';
-    
+
         this.attacking = false;
-        this.attackCooldown = true;
-    
+        this.attackCooldown = true;//after a set time, the attack ends and the sword returns to idle
+
         setTimeout(() => {
           this.attackCooldown = false;
-        }, 150); // ← cooldown
-      }, 300); // ← sword stab duration
+        }, 300);//duration of attack
+      }, 150); //attack cooldown
     }
-    
+
   }
 
-  handleCollisions() {
+  handleCollisions() {//function called upon to handle the bots collisions with the ground and platforms
     this.onGround = false;
 
     const platforms = Array.from(document.querySelectorAll('.platform'));
@@ -178,18 +187,18 @@ class Bot {
       this.y = groundLevel - this.height;
       this.vy = 0;
       this.onGround = true;
-    }
+    }//collision with platforms and ground determined in the same manner as the player
   }
 
   respawn(startX, startY) {
     this.x = startX;
     this.y = startY;
-    this.health = 3;
+    this.health = 100;
     this.vx = 0;
     this.vy = 0;
     this.isKnockedBack = false;
 
     this.element.style.left = this.x + 'px';
-    this.element.style.top = this.y + 'px';
+    this.element.style.top = this.y + 'px';//respawn function for the bot, same as player
   }
 }

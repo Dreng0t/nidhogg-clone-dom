@@ -10,20 +10,40 @@
 <body>
 
   <div id="ui">
-    <div id="player-health">Player Health: 3</div>
-    <div id="bot-health">Bot Health: 3</div>
+    <div class="health-container">
+      <div class="label">Player</div>
+      <div class="health-bar-bg">
+        <div id="player-health-bar" class="health-bar-fill"></div>
+      </div>
+    </div>
+  
+    <div class="health-container">
+      <div class="label">Bot</div>
+      <div class="health-bar-bg">
+        <div id="bot-health-bar" class="health-bar-fill"></div>
+      </div>
+    </div>
   </div>
+  
 
   <div id="start-screen">
-    <h1>Nidhogg Clone</h1>
-    <button id="start-button">Start Game</button>
+    <div id="title-box">
+      <h1>Nidhogg Clone</h1>
+      <button id="start-button">Start Game</button>
+    </div>
   </div>
+  
   
 
   <div id="game">
 
     <div id="player" class="entity"></div>
     <div id="bot" class="entity"></div>
+
+    <img id="death-image" src="" alt="defeat image">
+
+    <img id="victory-image" class="fullscreen-image" src="" alt="Victory">
+      <div id="victory-text">Press R to Restart</div>
 
     <div id="platforms">
       <div class="platform" style="left: 175px; top: 500px; width: 350px;"></div><!--Bottom Platform-->
