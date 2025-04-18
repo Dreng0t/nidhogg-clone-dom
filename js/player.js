@@ -46,9 +46,9 @@ class Player {
             case 'run':
                 this.element.style.backgroundImage = "url('assets/Run.png')";
                 break;
-            case 'attack':
+            /*case 'attack':
                 this.element.style.backgroundImage = "url('assets/Punch.png')";
-                break;
+                break;*/
             case 'jump':
                 this.element.style.backgroundImage = "url('assets/Jump.png')";
                 break;
@@ -56,7 +56,7 @@ class Player {
     }//switch statement to determine what the player is dong and which sprite should be used
 
 
-    update() {//update function which is called every frame with in game.js to update the player state to the changing stae of the game
+    update() {//update function which is called every frame with in game.js to update the player state to the changing state of the game
         if (!this.isKnockedBack) {
             if (keys['a']) {
                 this.vx = -this.speed;//moves left, negative velocity
@@ -84,10 +84,6 @@ class Player {
                     ? 'scaleX(1) rotate(30deg)'
                     : 'scaleX(-1) rotate(-30deg)';//angle of the sword when at rest, negatives for when player is looking left
             }
-
-
-
-
         }
 
         if (keys['w'] && this.onGround) {//similar to the movement handling but for jumping
@@ -187,5 +183,5 @@ class Player {
 
         this.element.style.left = this.x + 'px';
         this.element.style.top = this.y + 'px';
-    }//respawn, effectively just rests player to default values
+    }//respawn, effectively just resets player to default values
 }
